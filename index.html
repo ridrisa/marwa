@@ -1,699 +1,250 @@
-<html><head><base href="/">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EventMasters | Creating Unforgettable Moments</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<style>
-:root {
-    --primary: #FF3366;
-    --secondary: #2C3E50;
-    --accent: #FFC107; 
-    --light: #F8F9FA;
-    --dark: #1A1A1A;
-    --pink-500: #ec4899;
-    --pink-600: #db2777;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventMasters | Creating Unforgettable Moments</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary: #FF3366;
+            --secondary: #2C3E50;
+            --accent: #FFC107;
+            --light: #F8F9FA;
+            --dark: #1A1A1A;
+        }
 
-body {
-    background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 255, 255, 0.5));
-    font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 255, 255, 0.5));
+            overflow-x: hidden;
+        }
 
-.header {
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+        .header {
+            height: 100vh;
+            background: url('https://source.unsplash.com/1600x900/?event') center/cover no-repeat;
+            position: relative;
+        }
 
-.nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255,255,255,0.95);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
+        .header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
 
-.nav.scrolled {
-    padding: 0.5rem 2rem;
-    background: rgba(255,255,255,0.98);
-}
+        .header-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    text-transform: uppercase;
-}
+        .cta-btn {
+            padding: 15px 40px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-.nav-links {
-    display: flex;
-    gap: 2rem;
-}
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
+        }
 
-.nav-links a {
-    color: var(--secondary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-}
+        .services,
+        .portfolio,
+        .team,
+        .pricing,
+        .testimonials,
+        .blog,
+        .contact {
+            padding: 100px 50px;
+        }
 
-.nav-links a:hover {
-    color: var(--primary);
-}
+        .services-grid,
+        .portfolio-grid,
+        .team-grid,
+        .pricing-grid,
+        .blog-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-}
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
 
-.mobile-menu-btn span {
-    width: 25px;
-    height: 3px;
-    background: var(--secondary);
-    transition: all 0.3s;
-}
+        .card:hover {
+            transform: translateY(-10px);
+        }
 
-.hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    padding: 0 20px;
-    background: rgba(0,0,0,0.5);
-    color: white;
-}
+        .testimonial-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
 
-.hero h1 {
-    font-size: 5rem;
-    margin-bottom: 20px;
-    opacity: 0;
-    transform: translateY(50px);
-}
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+        }
 
-.hero p {
-    font-size: 1.2rem;
-    max-width: 800px;
-    margin-bottom: 30px;
-    opacity: 0;
-    transform: translateY(30px);
-}
+        .footer {
+            padding: 50px;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+        }
 
-.cta-btn {
-    padding: 15px 40px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-.cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
-}
-
-.floating-shapes {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.services {
-    padding: 100px 50px;
-    background: white;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.service-card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-    opacity: 0;
-    transform: translateY(50px);
-}
-
-.service-card:hover {
-    transform: translateY(-10px);
-}
-
-.contact {
-    padding: 100px 50px;
-    background: var(--secondary);
-    color: white;
-}
-
-.contact-form {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.footer {
-    padding: 50px;
-    background: var(--dark);
-    color: white;
-    text-align: center;
-}
-
-.created-by {
-    margin-top: 20px;
-    font-style: italic;
-    color: var(--pink-500);
-}
-
-.testimonial-card {
-    transform: translateY(30px);
-    transition: transform 0.3s ease;
-}
-
-.testimonial-card:hover {
-    transform: translateY(-5px);
-}
-
-.event-card {
-    transform: scale(0.95);
-    transition: transform 0.3s ease;
-}
-
-.event-card:hover {
-    transform: scale(1.02);
-}
-
-.stat-card {
-    transform: translateY(20px);
-}
-
-@media (max-width: 768px) {
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    .nav-links {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        padding: 20px;
-        transform: translateY(-150%);
-        transition: transform 0.3s;
-    }
-    
-    .nav-links.active {
-        transform: translateY(0);
-    }
-
-    .hero h1 {
-        font-size: 3rem;
-    }
-}
-</style>
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="logo">EventMasters</div>
-        <div class="nav-links">
-            <a href="https://eventmasters.com/services">Services</a>
-            <a href="https://eventmasters.com/portfolio">Portfolio</a>
-            <a href="https://eventmasters.com/about">About</a>
-            <a href="https://eventmasters.com/contact">Contact</a>
-        </div>
-        <div class="mobile-menu-btn">
-            <span></span>
-            <span></span>
-            <span></span>
+    <nav class="nav bg-white fixed top-0 left-0 w-full z-50 shadow">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="logo text-xl font-bold text-primary">EventMasters</div>
+            <div class="nav-links hidden md:flex space-x-6">
+                <a href="#about" class="text-secondary hover:text-primary">About Us</a>
+                <a href="#services" class="text-secondary hover:text-primary">Services</a>
+                <a href="#portfolio" class="text-secondary hover:text-primary">Portfolio</a>
+                <a href="#team" class="text-secondary hover:text-primary">Team</a>
+                <a href="#contact" class="text-secondary hover:text-primary">Contact</a>
+            </div>
+            <div class="mobile-menu-btn md:hidden">
+                <i class="material-icons text-secondary">menu</i>
+            </div>
         </div>
     </nav>
 
     <header class="header">
-        <div class="floating-shapes">
-            <!-- SVG shapes will be injected here by JavaScript -->
-        </div>
-        <div class="hero">
-            <h1>Creating Unforgettable Moments</h1>
-            <p>We turn your dreams into extraordinary events. From corporate gatherings to magical weddings, we make every moment count.</p>
+        <div class="header-content">
+            <h1 class="text-5xl font-bold">Creating Unforgettable Moments</h1>
+            <p class="mt-4 text-lg">We turn your dreams into extraordinary events.</p>
             <button class="cta-btn">Start Planning</button>
         </div>
     </header>
 
-    <section class="services">
+    <section id="about" class="about bg-gray-50">
+        <div class="max-w-5xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6">About Us</h2>
+            <p class="text-lg">EventMasters is dedicated to making every event unique, memorable, and stress-free.</p>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <h2 class="text-4xl font-bold text-center mb-12">Our Services</h2>
         <div class="services-grid">
-            <div class="service-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
-                <h3 class="text-xl font-bold text-pink-500">Corporate Events</h3>
-                <p class="mt-2 text-gray-600">Professional conferences, team building activities, and business gatherings designed to leave lasting impressions.</p>
+            <div class="card">
+                <h3 class="text-xl font-bold">Corporate Events</h3>
+                <p class="mt-2">Professional conferences and business gatherings that impress.</p>
             </div>
-            <div class="service-card">
-                <h3>Weddings</h3>
-                <p>Your perfect day crafted with love and attention to every detail, creating memories that last a lifetime.</p>
+            <div class="card">
+                <h3 class="text-xl font-bold">Weddings</h3>
+                <p class="mt-2">Your perfect day crafted with love and attention to every detail.</p>
             </div>
-            <div class="service-card">
-                <h3>Social Gatherings</h3>
-                <p>From birthday parties to reunions, we bring people together in celebration and joy.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="testimonials py-20 bg-gray-50">
-        <h2 class="text-4xl font-bold text-center mb-12">What Our Clients Say</h2>
-        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="testimonial-card bg-white p-6 rounded-lg shadow-lg opacity-0">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white text-xl font-bold">J</div>
-                    <div class="ml-4">
-                        <h4 class="font-semibold">John Smith</h4>
-                        <p class="text-gray-500">Corporate Event</p>
-                    </div>
-                </div>
-                <p class="text-gray-600">"EventMasters transformed our annual conference into an unforgettable experience. The attention to detail was exceptional!"</p>
-            </div>
-            <div class="testimonial-card bg-white p-6 rounded-lg shadow-lg opacity-0">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white text-xl font-bold">S</div>
-                    <div class="ml-4">
-                        <h4 class="font-semibold">Sarah Johnson</h4>
-                        <p class="text-gray-500">Wedding Ceremony</p>
-                    </div>
-                </div>
-                <p class="text-gray-600">"Our dream wedding became a reality thanks to EventMasters. Every moment was pure magic!"</p>
-            </div>
-            <div class="testimonial-card bg-white p-6 rounded-lg shadow-lg opacity-0">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white text-xl font-bold">M</div>
-                    <div class="ml-4">
-                        <h4 class="font-semibold">Mike Richards</h4>
-                        <p class="text-gray-500">Birthday Party</p>
-                    </div>
-                </div>
-                <p class="text-gray-600">"The team went above and beyond to create a spectacular birthday celebration. Highly recommended!"</p>
+            <div class="card">
+                <h3 class="text-xl font-bold">Festivals</h3>
+                <p class="mt-2">Large-scale outdoor events with breathtaking themes and designs.</p>
             </div>
         </div>
     </section>
 
-    <section class="featured-events py-20">
-        <h2 class="text-4xl font-bold text-center mb-12">Our Featured Events</h2>
-        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="event-card opacity-0">
-                <div class="relative overflow-hidden rounded-lg h-80">
-                    <div class="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 opacity-90"></div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                        <h3 class="text-2xl font-bold mb-2">Tech Conference 2023</h3>
-                        <p>A groundbreaking tech conference bringing together industry leaders.</p>
-                    </div>
-                </div>
+    <section id="portfolio" class="portfolio bg-gray-50">
+        <h2 class="text-4xl font-bold text-center mb-12">Our Portfolio</h2>
+        <div class="portfolio-grid">
+            <div class="card">
+                <img src="https://source.unsplash.com/300x300/?wedding" alt="Wedding" class="rounded-lg mb-4">
+                <h3 class="text-xl font-bold">Elegant Wedding</h3>
+                <p class="mt-2">A stunning wedding at a picturesque location.</p>
             </div>
-            <div class="event-card opacity-0">
-                <div class="relative overflow-hidden rounded-lg h-80">
-                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-500 opacity-90"></div>
-                    <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                        <h3 class="text-2xl font-bold mb-2">Summer Garden Wedding</h3>
-                        <p>An enchanting outdoor wedding celebration under the stars.</p>
-                    </div>
-                </div>
+            <div class="card">
+                <img src="https://source.unsplash.com/300x300/?conference" alt="Conference" class="rounded-lg mb-4">
+                <h3 class="text-xl font-bold">Tech Conference</h3>
+                <p class="mt-2">A groundbreaking tech conference for industry leaders.</p>
             </div>
         </div>
     </section>
 
-    <section class="stats bg-gradient-to-r from-pink-500 to-purple-600 py-20 text-white">
-        <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div class="stat-card opacity-0">
-                <h3 class="text-4xl font-bold mb-2">500+</h3>
-                <p>Events Completed</p>
+    <section id="team" class="team">
+        <h2 class="text-4xl font-bold text-center mb-12">Meet Our Team</h2>
+        <div class="team-grid">
+            <div class="card">
+                <img src="https://source.unsplash.com/150x150/?person" alt="Team Member" class="rounded-full mx-auto mb-4">
+                <h3 class="text-xl font-bold text-center">John Doe</h3>
+                <p class="text-center">Event Manager</p>
             </div>
-            <div class="stat-card opacity-0">
-                <h3 class="text-4xl font-bold mb-2">98%</h3>
-                <p>Client Satisfaction</p>
-            </div>
-            <div class="stat-card opacity-0">
-                <h3 class="text-4xl font-bold mb-2">50+</h3>
-                <p>Team Members</p>
-            </div>
-            <div class="stat-card opacity-0">
-                <h3 class="text-4xl font-bold mb-2">10+</h3>
-                <p>Years Experience</p>
+            <div class="card">
+                <img src="https://source.unsplash.com/150x150/?woman" alt="Team Member" class="rounded-full mx-auto mb-4">
+                <h3 class="text-xl font-bold text-center">Jane Smith</h3>
+                <p class="text-center">Creative Director</p>
             </div>
         </div>
     </section>
 
-    <section class="contact">
-        <h2 class="section-title">Get In Touch</h2>
-        <div class="contact-form max-w-lg mx-auto">
-            <div class="form-group">
-                <input type="text" class="w-full p-4 rounded-lg bg-white border border-gray-200" placeholder="Your Name">
-            </div>
-            <div class="form-group">
-                <input type="email" class="w-full p-4 rounded-lg bg-white border border-gray-200" placeholder="Your Email">
-            </div>
-            <div class="form-group">
-                <textarea class="w-full p-4 rounded-lg bg-white border border-gray-200" placeholder="Your Message" rows="5"></textarea>
-            </div>
-            <button class="cta-btn w-full">Send Message</button>
+    <section id="contact" class="contact bg-gray-50">
+        <h2 class="text-4xl font-bold text-center mb-12">Contact Us</h2>
+        <div class="max-w-lg mx-auto">
+            <form>
+                <input type="text" placeholder="Your Name" class="w-full p-4 rounded-lg border mb-4">
+                <input type="email" placeholder="Your Email" class="w-full p-4 rounded-lg border mb-4">
+                <textarea placeholder="Your Message" class="w-full p-4 rounded-lg border mb-4"></textarea>
+                <button type="submit" class="cta-btn w-full">Send Message</button>
+            </form>
         </div>
     </section>
 
     <footer class="footer">
         <p>EventMasters © 2023. All rights reserved.</p>
-        <div class="social-links">
-            <a href="https://facebook.com/eventmasters">Facebook</a>
-            <a href="https://instagram.com/eventmasters">Instagram</a>
-            <a href="https://linkedin.com/company/eventmasters">LinkedIn</a>
-        </div>
-        <div class="created-by">
-            Created with ❤️ by Ramiz
+        <div>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
         </div>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Mobile menu functionality
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    const nav = document.querySelector('.nav');
-
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.toggle('active');
-        navLinks.classList.toggle('active');
-    });
-
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-    });
-
-    // GSAP Animations
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Create floating shapes
-    const floatingShapes = document.querySelector('.floating-shapes');
-    const shapes = ['circle', 'square', 'triangle'];
-    const colors = ['#FF3366', '#FFC107', '#2C3E50'];
-
-    for (let i = 0; i < 15; i++) {
-        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        shape.setAttribute('viewBox', '0 0 100 100');
-        shape.style.position = 'absolute';
-        shape.style.left = Math.random() * 100 + '%';
-        shape.style.top = Math.random() * 100 + '%';
-        shape.style.width = (Math.random() * 30 + 20) + 'px';
-        shape.style.fill = colors[Math.floor(Math.random() * colors.length)];
-        shape.style.opacity = 0.3;
-
-        const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
-        let pathD = '';
-
-        switch(shapeType) {
-            case 'circle':
-                pathD = 'M50,50 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0';
-                break;
-            case 'square':
-                pathD = 'M25,25 L75,25 L75,75 L25,75 Z';
-                break;
-            case 'triangle':
-                pathD = 'M50,20 L80,80 L20,80 Z';
-                break;
-        }
-
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', pathD);
-        shape.appendChild(path);
-        floatingShapes.appendChild(shape);
-
-        gsap.to(shape, {
-            y: Math.random() * 100 - 50,
-            x: Math.random() * 100 - 50,
-            rotation: Math.random() * 360,
-            duration: Math.random() * 5 + 5,
-            repeat: -1,
-            yoyo: true,
-            ease: 'none'
-        });
-    }
-
-    // Hero animations
-    gsap.to('.hero h1', {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        delay: 0.5
-    });
-
-    gsap.to('.hero p', {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        delay: 0.8
-    });
-
-    gsap.to('.cta-btn', {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        delay: 1.1
-    });
-
-    // Service cards animation
-    gsap.utils.toArray('.service-card').forEach((card, i) => {
-        gsap.to(card, {
-            scrollTrigger: {
-                trigger: card,
-                start: 'top bottom-=100',
-                toggleActions: 'play none none reverse'
-            },
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: i * 0.2
-        });
-    });
-
-    // Testimonial cards animation
-    gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
-        gsap.to(card, {
-            scrollTrigger: {
-                trigger: card,
-                start: 'top bottom-=100',
-                toggleActions: 'play none none reverse'
-            },
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: i * 0.2
-        });
-    });
-
-    // Featured events animation
-    gsap.utils.toArray('.event-card').forEach((card, i) => {
-        gsap.to(card, {
-            scrollTrigger: {
-                trigger: card,
-                start: 'top bottom-=100',
-                toggleActions: 'play none none reverse'
-            },
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            delay: i * 0.3
-        });
-    });
-
-    // Add floating event cards animation
-    const eventCards = document.querySelectorAll('.event-card');
-    eventCards.forEach((card) => {
-        gsap.to(card, {
-            y: -20,
-            duration: 2,
-            repeat: -1,
-            yoyo: true,
-            ease: "power1.inOut"
-        });
-
-        // Add hover effect
-        card.addEventListener('mouseenter', () => {
-            gsap.to(card, {
-                scale: 1.05,
-                duration: 0.3,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".header-content h1", { opacity: 0, y: -50, duration: 1 });
+        gsap.from(".header-content p", { opacity: 0, y: 50, duration: 1, delay: 0.5 });
+        gsap.utils.toArray(".card").forEach(card => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 80%"
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1
             });
         });
-
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, {
-                scale: 1,
-                duration: 0.3,
-                boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
-            });
-        });
-    });
-
-    // Stats animation with stagger
-    gsap.from('.stat-card', {
-        scrollTrigger: {
-            trigger: '.stats',
-            start: "top center"
-        },
-        y: 100,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "back.out(1.7)"
-    });
-
-    // Add rotating animation to service icons
-    const serviceCards = document.querySelectorAll('.service-card');
-    serviceCards.forEach((card) => {
-        gsap.to(card, {
-            rotationY: 360,
-            duration: 1.5,
-            scrollTrigger: {
-                trigger: card,
-                start: "top center",
-                toggleActions: "play none none reverse"
-            }
-        });
-    });
-
-    // Add parallax effect to featured events
-    gsap.utils.toArray('.event-card').forEach(card => {
-        gsap.to(card, {
-            scrollTrigger: {
-                trigger: card,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1
-            },
-            y: -50,
-            ease: "none"
-        });
-    });
-
-    // Add text reveal animation for event titles
-    const eventTitles = document.querySelectorAll('.event-card h3');
-    eventTitles.forEach(title => {
-        gsap.from(title, {
-            scrollTrigger: {
-                trigger: title,
-                start: "top bottom-=100"
-            },
-            duration: 1,
-            opacity: 0,
-            x: -50,
-            ease: "power3.out"
-        });
-    });
-
-    // Add scale animation to testimonial avatars
-    const testimonialAvatars = document.querySelectorAll('.testimonial-card .w-12');
-    testimonialAvatars.forEach(avatar => {
-        gsap.to(avatar, {
-            scale: 1.2,
-            duration: 0.5,
-            repeat: -1,
-            yoyo: true,
-            ease: "power1.inOut"
-        });
-    });
-
-    // Add bounce animation to CTA button
-    gsap.to('.cta-btn', {
-        y: -10,
-        duration: 1,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut"
-    });
-
-    // Add text scramble effect for section titles
-    const scrambleText = (element) => {
-        const originalText = element.textContent;
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        let interval = null;
-        let iteration = 0;
-        
-        clearInterval(interval);
-        
-        interval = setInterval(() => {
-            element.innerText = originalText
-                .split("")
-                .map((letter, index) => {
-                    if(index < iteration) {
-                        return originalText[index];
-                    }
-                    return letters[Math.floor(Math.random() * 26)]
-                })
-                .join("");
-            
-            if(iteration >= originalText.length){ 
-                clearInterval(interval);
-            }
-            
-            iteration += 1/3;
-        }, 30);
-    };
-
-    document.querySelectorAll('section h2').forEach(title => {
-        ScrollTrigger.create({
-            trigger: title,
-            start: "top center",
-            onEnter: () => scrambleText(title)
-        });
-    });
-
-    // Created by animation
-    gsap.to('.created-by', {
-        scrollTrigger: {
-            trigger: '.footer',
-            start: 'top bottom'
-        },
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power2.out'
-    });
-});
-</script>
-</body></html>
+    </script>
+</body>
+</html>
