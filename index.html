@@ -1,135 +1,701 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventMasters | Creating Unforgettable Moments</title>
+    
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- DaisyUI -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css">
+    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Lightbox CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #FF3366;
             --secondary: #2C3E50;
-            --accent: #FFC107;
+            --accent: #FFC107; 
             --light: #F8F9FA;
             --dark: #1A1A1A;
+            --pink-500: #ec4899;
+            --pink-600: #db2777;
         }
-
+        
         body {
-            font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 255, 255, 0.5));
+            font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
         }
-
-        .header {
-            height: 100vh;
-            background: url('https://source.unsplash.com/1600x900/?event') center/cover no-repeat;
-            position: relative;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
-            color: white;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
         }
-
+        
+        .spinner {
+            border: 8px solid var(--light);
+            border-top: 8px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Navbar Styles */
+        .nav {
+            transition: all 0.3s ease;
+        }
+        
+        .nav.scrolled {
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.5rem 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
         .cta-btn {
             padding: 15px 40px;
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 30px;
-            font-size: 1.2rem;
-            margin-top: 20px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
         }
-
+        
         .cta-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
         }
-
-        .services,
-        .portfolio,
-        .team,
-        .pricing,
-        .testimonials,
-        .blog,
-        .contact {
-            padding: 100px 50px;
+        
+        /* Floating Shapes */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
-
-        .services-grid,
-        .portfolio-grid,
-        .team-grid,
-        .pricing-grid,
-        .blog-grid {
+        
+        /* About Section */
+        .about {
+            padding: 100px 50px;
+            background: var(--light);
+            text-align: center;
+        }
+        
+        .timeline {
+            max-width: 800px;
+            margin: 40px auto;
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -11px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid white;
+        }
+        
+        /* Services Section */
+        .services {
+            background: white;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        /* Portfolio Section */
+        .portfolio {
+            padding: 100px 50px;
+            background: var(--light);
+            text-align: center;
+        }
+        
+        .portfolio-grid {
             display: grid;
-            gap: 30px;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        .card {
-            background: white;
-            padding: 20px;
+        
+        .portfolio-card {
+            position: relative;
+            overflow: hidden;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .portfolio-card:hover {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .portfolio-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
             transition: transform 0.3s;
         }
-
-        .card:hover {
-            transform: translateY(-10px);
+        
+        .portfolio-card:hover img {
+            transform: scale(1.1);
         }
-
-        .testimonial-card {
-            background: white;
+        
+        .portfolio-card .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 51, 102, 0.8);
+            color: white;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        
+        .portfolio-card:hover .overlay {
+            transform: translateY(0);
+        }
+        
+        /* Team Section */
+        .team {
+            padding: 100px 50px;
+            background: white;
             text-align: center;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .team-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .team-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 20px;
             transition: transform 0.3s;
         }
-
-        .testimonial-card:hover {
-            transform: translateY(-10px);
+        
+        .team-card:hover img {
+            transform: scale(1.05);
         }
-
+        
+        .team-card .info {
+            text-align: center;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 50px;
+            background: var(--light);
+            text-align: center;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .pricing-card.popular::before {
+            content: "Popular";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .pricing-card p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .pricing-card .price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card ul li {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 50px;
+            background: white;
+            text-align: center;
+        }
+        
+        .testimonials h2 {
+            margin-bottom: 40px;
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-item {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .testimonial-item::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary);
+            position: absolute;
+            top: -20px;
+            left: -10px;
+        }
+        
+        .testimonial-item p {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-item .client {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .testimonial-item .client img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .testimonial-item .client .info {
+            text-align: left;
+        }
+        
+        /* Blog Section */
+        .blog {
+            padding: 100px 50px;
+            background: var(--light);
+            text-align: center;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .blog-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .blog-card .content {
+            padding: 20px;
+            text-align: left;
+        }
+        
+        .blog-card .content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .blog-card .content p {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .blog-card .content a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 100px 50px;
+            background: white;
+            text-align: center;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        
+        .contact-form .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .contact-form .form-group input,
+        .contact-form .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--light);
+            border-radius: 10px;
+            background: transparent;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .contact-form .form-group input:focus,
+        .contact-form .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .contact-form .form-group label {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 5px;
+            color: var(--secondary);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        
+        .contact-form .form-group input:focus + label,
+        .contact-form .form-group input:not(:placeholder-shown) + label,
+        .contact-form .form-group textarea:focus + label,
+        .contact-form .form-group textarea:not(:placeholder-shown) + label {
+            top: -10px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        
+        /* Contact Map */
+        .contact-map {
+            margin-top: 50px;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        /* Footer Section */
         .footer {
             padding: 50px;
             background: var(--dark);
             color: white;
             text-align: center;
         }
-
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
+        
+        .footer .social-links a {
+            color: white;
             margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+        
+        .footer .social-links a:hover {
+            color: var(--primary);
+            transform: scale(1.2);
+        }
+        
+        .footer .newsletter {
+            margin-top: 20px;
+        }
+        
+        .footer .newsletter input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            width: 200px;
+        }
+        
+        .footer .newsletter button {
+            padding: 10px 20px;
+            background: var(--primary);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .footer .newsletter button:hover {
+            background: var(--pink-600);
+        }
+        
+        .footer .partner-logos {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .footer .partner-logos img {
+            width: 100px;
+            height: auto;
+            transition: transform 0.3s;
+        }
+        
+        .footer .partner-logos img:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                transform: translateY(-150%);
+                transition: transform 0.3s;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            
+            .nav-links a {
+                margin: 10px 0;
+            }
+            
+            .timeline {
+                padding-left: 20px;
+            }
+            
+            .timeline::before {
+                left: 10px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="relative">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- Navigation -->
     <nav class="nav bg-white fixed top-0 left-0 w-full z-50 shadow">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="logo text-xl font-bold text-primary">EventMasters</div>
@@ -138,113 +704,705 @@
                 <a href="#services" class="text-secondary hover:text-primary">Services</a>
                 <a href="#portfolio" class="text-secondary hover:text-primary">Portfolio</a>
                 <a href="#team" class="text-secondary hover:text-primary">Team</a>
+                <a href="#pricing" class="text-secondary hover:text-primary">Pricing</a>
+                <a href="#blog" class="text-secondary hover:text-primary">Blog</a>
                 <a href="#contact" class="text-secondary hover:text-primary">Contact</a>
             </div>
             <div class="mobile-menu-btn md:hidden">
-                <i class="material-icons text-secondary">menu</i>
+                <span class="block w-6 h-0.5 bg-secondary transition-transform"></span>
+                <span class="block w-6 h-0.5 bg-secondary transition-opacity"></span>
+                <span class="block w-6 h-0.5 bg-secondary transition-transform"></span>
             </div>
         </div>
     </nav>
-
-    <header class="header">
+    
+    <!-- Hero Section -->
+    <header class="header flex items-center justify-center">
+        <div class="floating-shapes">
+            <!-- SVG shapes will be injected here by JavaScript -->
+        </div>
         <div class="header-content">
             <h1 class="text-5xl font-bold">Creating Unforgettable Moments</h1>
-            <p class="mt-4 text-lg">We turn your dreams into extraordinary events.</p>
+            <p class="mt-4 text-lg">We turn your dreams into extraordinary events. From corporate gatherings to magical weddings, we make every moment count.</p>
             <button class="cta-btn">Start Planning</button>
         </div>
     </header>
-
+    
+    <!-- About Us Section -->
     <section id="about" class="about bg-gray-50">
         <div class="max-w-5xl mx-auto text-center">
             <h2 class="text-4xl font-bold mb-6">About Us</h2>
-            <p class="text-lg">EventMasters is dedicated to making every event unique, memorable, and stress-free.</p>
+            <p class="text-lg">EventMasters is dedicated to making every event unique, memorable, and stress-free. With over a decade of experience, our team of professionals ensures that your events are executed flawlessly.</p>
+            
+            <!-- Timeline -->
+            <div class="timeline mt-12">
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">2013 - Founded</h3>
+                    <p>EventMasters was founded with a mission to create unforgettable experiences.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">2015 - First Major Event</h3>
+                    <p>Successfully executed our first large-scale corporate event.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">2018 - Expansion</h3>
+                    <p>Expanded our services to include weddings and social gatherings.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3 class="text-xl font-semibold">2023 - 500+ Events</h3>
+                    <p>Celebrated completing over 500 events worldwide.</p>
+                </div>
+            </div>
         </div>
     </section>
-
+    
+    <!-- Services Section -->
     <section id="services" class="services">
         <h2 class="text-4xl font-bold text-center mb-12">Our Services</h2>
         <div class="services-grid">
-            <div class="card">
-                <h3 class="text-xl font-bold">Corporate Events</h3>
-                <p class="mt-2">Professional conferences and business gatherings that impress.</p>
+            <!-- Service Card 1 -->
+            <div class="service-card bg-white rounded-lg shadow-lg transition-all duration-300">
+                <div class="icon mb-4">
+                    <i class="material-icons text-4xl text-primary">business_center</i>
+                </div>
+                <h3 class="text-xl font-bold text-pink-500 mb-2">Corporate Events</h3>
+                <p class="text-gray-600">Professional conferences, team-building activities, and business gatherings designed to leave lasting impressions.</p>
             </div>
-            <div class="card">
-                <h3 class="text-xl font-bold">Weddings</h3>
-                <p class="mt-2">Your perfect day crafted with love and attention to every detail.</p>
+            <!-- Service Card 2 -->
+            <div class="service-card bg-white rounded-lg shadow-lg transition-all duration-300">
+                <div class="icon mb-4">
+                    <i class="material-icons text-4xl text-primary">celebration</i>
+                </div>
+                <h3 class="text-xl font-bold text-pink-500 mb-2">Weddings</h3>
+                <p class="text-gray-600">Your perfect day crafted with love and attention to every detail, creating memories that last a lifetime.</p>
             </div>
-            <div class="card">
-                <h3 class="text-xl font-bold">Festivals</h3>
-                <p class="mt-2">Large-scale outdoor events with breathtaking themes and designs.</p>
+            <!-- Service Card 3 -->
+            <div class="service-card bg-white rounded-lg shadow-lg transition-all duration-300">
+                <div class="icon mb-4">
+                    <i class="material-icons text-4xl text-primary">party_mode</i>
+                </div>
+                <h3 class="text-xl font-bold text-pink-500 mb-2">Festivals</h3>
+                <p class="text-gray-600">Large-scale outdoor events with breathtaking themes and designs to captivate your audience.</p>
+            </div>
+            <!-- Service Card 4 -->
+            <div class="service-card bg-white rounded-lg shadow-lg transition-all duration-300">
+                <div class="icon mb-4">
+                    <i class="material-icons text-4xl text-primary">virtual_reality</i>
+                </div>
+                <h3 class="text-xl font-bold text-pink-500 mb-2">Virtual Events</h3>
+                <p class="text-gray-600">Seamless virtual event management with interactive platforms and engaging content.</p>
+            </div>
+            <!-- Service Card 5 -->
+            <div class="service-card bg-white rounded-lg shadow-lg transition-all duration-300">
+                <div class="icon mb-4">
+                    <i class="material-icons text-4xl text-primary">local_florist</i>
+                </div>
+                <h3 class="text-xl font-bold text-pink-500 mb-2">Decorations</h3>
+                <p class="text-gray-600">Creative and personalized decorations to transform any space into a stunning venue.</p>
+            </div>
+            <!-- Service Card 6 -->
+            <div class="service-card bg-white rounded-lg shadow-lg transition-all duration-300">
+                <div class="icon mb-4">
+                    <i class="material-icons text-4xl text-primary">music_note</i>
+                </div>
+                <h3 class="text-xl font-bold text-pink-500 mb-2">Entertainment</h3>
+                <p class="text-gray-600">Top-notch entertainment options to keep your guests engaged and entertained throughout the event.</p>
             </div>
         </div>
     </section>
-
-    <section id="portfolio" class="portfolio bg-gray-50">
+    
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
         <h2 class="text-4xl font-bold text-center mb-12">Our Portfolio</h2>
         <div class="portfolio-grid">
-            <div class="card">
-                <img src="https://source.unsplash.com/300x300/?wedding" alt="Wedding" class="rounded-lg mb-4">
-                <h3 class="text-xl font-bold">Elegant Wedding</h3>
-                <p class="mt-2">A stunning wedding at a picturesque location.</p>
+            <!-- Portfolio Card 1 -->
+            <div class="portfolio-card">
+                <a href="https://source.unsplash.com/800x600/?wedding" data-lightbox="portfolio" data-title="Elegant Wedding">
+                    <img src="https://source.unsplash.com/300x300/?wedding" alt="Elegant Wedding">
+                </a>
+                <div class="overlay p-4">
+                    <h3 class="text-xl font-bold">Elegant Wedding</h3>
+                    <p>An enchanting outdoor wedding celebration under the stars.</p>
+                </div>
             </div>
-            <div class="card">
-                <img src="https://source.unsplash.com/300x300/?conference" alt="Conference" class="rounded-lg mb-4">
-                <h3 class="text-xl font-bold">Tech Conference</h3>
-                <p class="mt-2">A groundbreaking tech conference for industry leaders.</p>
+            <!-- Portfolio Card 2 -->
+            <div class="portfolio-card">
+                <a href="https://source.unsplash.com/800x600/?conference" data-lightbox="portfolio" data-title="Tech Conference 2023">
+                    <img src="https://source.unsplash.com/300x300/?conference" alt="Tech Conference">
+                </a>
+                <div class="overlay p-4">
+                    <h3 class="text-xl font-bold">Tech Conference 2023</h3>
+                    <p>A groundbreaking tech conference bringing together industry leaders.</p>
+                </div>
+            </div>
+            <!-- Portfolio Card 3 -->
+            <div class="portfolio-card">
+                <a href="https://source.unsplash.com/800x600/?festival" data-lightbox="portfolio" data-title="Summer Music Festival">
+                    <img src="https://source.unsplash.com/300x300/?festival" alt="Summer Music Festival">
+                </a>
+                <div class="overlay p-4">
+                    <h3 class="text-xl font-bold">Summer Music Festival</h3>
+                    <p>A vibrant music festival with top artists and an electrifying atmosphere.</p>
+                </div>
+            </div>
+            <!-- Portfolio Card 4 -->
+            <div class="portfolio-card">
+                <a href="https://source.unsplash.com/800x600/?birthday" data-lightbox="portfolio" data-title="Children's Birthday Party">
+                    <img src="https://source.unsplash.com/300x300/?birthday" alt="Children's Birthday Party">
+                </a>
+                <div class="overlay p-4">
+                    <h3 class="text-xl font-bold">Children's Birthday Party</h3>
+                    <p>A fun-filled birthday party with games, entertainment, and joyful moments.</p>
+                </div>
+            </div>
+            <!-- Portfolio Card 5 -->
+            <div class="portfolio-card">
+                <a href="https://source.unsplash.com/800x600/?corporate" data-lightbox="portfolio" data-title="Corporate Gala">
+                    <img src="https://source.unsplash.com/300x300/?corporate" alt="Corporate Gala">
+                </a>
+                <div class="overlay p-4">
+                    <h3 class="text-xl font-bold">Corporate Gala</h3>
+                    <p>An elegant corporate gala with networking opportunities and exquisite catering.</p>
+                </div>
+            </div>
+            <!-- Portfolio Card 6 -->
+            <div class="portfolio-card">
+                <a href="https://source.unsplash.com/800x600/?art" data-lightbox="portfolio" data-title="Art Exhibition">
+                    <img src="https://source.unsplash.com/300x300/?art" alt="Art Exhibition">
+                </a>
+                <div class="overlay p-4">
+                    <h3 class="text-xl font-bold">Art Exhibition</h3>
+                    <p>A captivating art exhibition showcasing diverse talents and creative expressions.</p>
+                </div>
             </div>
         </div>
     </section>
-
-    <section id="team" class="team">
+    
+    <!-- Team Section -->
+    <section id="team" class="team bg-gray-50">
         <h2 class="text-4xl font-bold text-center mb-12">Meet Our Team</h2>
         <div class="team-grid">
-            <div class="card">
-                <img src="https://source.unsplash.com/150x150/?person" alt="Team Member" class="rounded-full mx-auto mb-4">
-                <h3 class="text-xl font-bold text-center">John Doe</h3>
-                <p class="text-center">Event Manager</p>
+            <!-- Team Member 1 -->
+            <div class="team-card">
+                <img src="https://source.unsplash.com/150x150/?person1" alt="John Doe">
+                <div class="info">
+                    <h3 class="text-xl font-bold text-center">John Doe</h3>
+                    <p class="text-center">Event Manager</p>
+                </div>
             </div>
-            <div class="card">
-                <img src="https://source.unsplash.com/150x150/?woman" alt="Team Member" class="rounded-full mx-auto mb-4">
-                <h3 class="text-xl font-bold text-center">Jane Smith</h3>
-                <p class="text-center">Creative Director</p>
+            <!-- Team Member 2 -->
+            <div class="team-card">
+                <img src="https://source.unsplash.com/150x150/?person2" alt="Jane Smith">
+                <div class="info">
+                    <h3 class="text-xl font-bold text-center">Jane Smith</h3>
+                    <p class="text-center">Creative Director</p>
+                </div>
+            </div>
+            <!-- Team Member 3 -->
+            <div class="team-card">
+                <img src="https://source.unsplash.com/150x150/?person3" alt="Michael Brown">
+                <div class="info">
+                    <h3 class="text-xl font-bold text-center">Michael Brown</h3>
+                    <p class="text-center">Marketing Specialist</p>
+                </div>
+            </div>
+            <!-- Team Member 4 -->
+            <div class="team-card">
+                <img src="https://source.unsplash.com/150x150/?person4" alt="Emily Davis">
+                <div class="info">
+                    <h3 class="text-xl font-bold text-center">Emily Davis</h3>
+                    <p class="text-center">Event Coordinator</p>
+                </div>
             </div>
         </div>
     </section>
-
-    <section id="contact" class="contact bg-gray-50">
-        <h2 class="text-4xl font-bold text-center mb-12">Contact Us</h2>
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <h2 class="text-4xl font-bold text-center mb-12">Pricing Plans</h2>
+        <div class="pricing-grid">
+            <!-- Pricing Card 1 -->
+            <div class="pricing-card">
+                <h3>Basic</h3>
+                <p class="price">$999</p>
+                <ul>
+                    <li>1 Event per Year</li>
+                    <li>Basic Support</li>
+                    <li>Access to Limited Services</li>
+                </ul>
+                <button class="cta-btn">Get Started</button>
+            </div>
+            <!-- Pricing Card 2 (Popular) -->
+            <div class="pricing-card popular">
+                <h3>Premium</h3>
+                <p class="price">$1999</p>
+                <ul>
+                    <li>5 Events per Year</li>
+                    <li>Priority Support</li>
+                    <li>Full Access to All Services</li>
+                </ul>
+                <button class="cta-btn">Get Started</button>
+            </div>
+            <!-- Pricing Card 3 -->
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <p class="price">$4999</p>
+                <ul>
+                    <li>Unlimited Events</li>
+                    <li>Dedicated Support Team</li>
+                    <li>Custom Event Solutions</li>
+                </ul>
+                <button class="cta-btn">Get Started</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <h2 class="text-4xl font-bold text-center mb-12">What Our Clients Say</h2>
+        <div class="testimonial-slider">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-item">
+                <p>"EventMasters transformed our annual conference into an unforgettable experience. The attention to detail was exceptional!"</p>
+                <div class="client">
+                    <img src="https://source.unsplash.com/50x50/?person5" alt="John Smith">
+                    <div class="info">
+                        <h4 class="font-semibold">John Smith</h4>
+                        <p>Corporate Executive</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="testimonial-item">
+                <p>"Our dream wedding became a reality thanks to EventMasters. Every moment was pure magic!"</p>
+                <div class="client">
+                    <img src="https://source.unsplash.com/50x50/?person6" alt="Sarah Johnson">
+                    <div class="info">
+                        <h4 class="font-semibold">Sarah Johnson</h4>
+                        <p>Bride</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="testimonial-item">
+                <p>"The team went above and beyond to create a spectacular birthday celebration. Highly recommended!"</p>
+                <div class="client">
+                    <img src="https://source.unsplash.com/50x50/?person7" alt="Mike Richards">
+                    <div class="info">
+                        <h4 class="font-semibold">Mike Richards</h4>
+                        <p>Event Organizer</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Testimonial 4 -->
+            <div class="testimonial-item">
+                <p>"Professional, creative, and reliable. EventMasters exceeded our expectations!"</p>
+                <div class="client">
+                    <img src="https://source.unsplash.com/50x50/?person8" alt="Laura Wilson">
+                    <div class="info">
+                        <h4 class="font-semibold">Laura Wilson</h4>
+                        <p>Festival Coordinator</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Blog Section -->
+    <section id="blog" class="blog">
+        <h2 class="text-4xl font-bold text-center mb-12">Latest Articles</h2>
+        <div class="blog-grid">
+            <!-- Blog Card 1 -->
+            <div class="blog-card">
+                <img src="https://source.unsplash.com/300x200/?event1" alt="Event Planning Tips">
+                <div class="content">
+                    <h3>Event Planning Tips for Beginners</h3>
+                    <p>Learn the essential tips and tricks to plan a successful event from scratch.</p>
+                    <a href="#" class="text-primary">Read More</a>
+                </div>
+            </div>
+            <!-- Blog Card 2 -->
+            <div class="blog-card">
+                <img src="https://source.unsplash.com/300x200/?event2" alt="Corporate Event Trends">
+                <div class="content">
+                    <h3>Top Corporate Event Trends in 2024</h3>
+                    <p>Stay ahead with the latest trends shaping corporate events this year.</p>
+                    <a href="#" class="text-primary">Read More</a>
+                </div>
+            </div>
+            <!-- Blog Card 3 -->
+            <div class="blog-card">
+                <img src="https://source.unsplash.com/300x200/?event3" alt="Wedding Inspirations">
+                <div class="content">
+                    <h3>Wedding Inspirations: Themes and Ideas</h3>
+                    <p>Discover unique themes and ideas to make your wedding unforgettable.</p>
+                    <a href="#" class="text-primary">Read More</a>
+                </div>
+            </div>
+            <!-- Blog Card 4 -->
+            <div class="blog-card">
+                <img src="https://source.unsplash.com/300x200/?event4" alt="Virtual Event Success">
+                <div class="content">
+                    <h3>Making Virtual Events Successful</h3>
+                    <p>Key strategies to ensure your virtual events are engaging and impactful.</p>
+                    <a href="#" class="text-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 class="text-4xl font-bold text-center mb-12">Get In Touch</h2>
         <div class="max-w-lg mx-auto">
             <form>
-                <input type="text" placeholder="Your Name" class="w-full p-4 rounded-lg border mb-4">
-                <input type="email" placeholder="Your Email" class="w-full p-4 rounded-lg border mb-4">
-                <textarea placeholder="Your Message" class="w-full p-4 rounded-lg border mb-4"></textarea>
+                <div class="form-group">
+                    <input type="text" id="name" required class="w-full p-4 rounded-lg border border-gray-200" placeholder=" " />
+                    <label for="name">Your Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" required class="w-full p-4 rounded-lg border border-gray-200" placeholder=" " />
+                    <label for="email">Your Email</label>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" required class="w-full p-4 rounded-lg border border-gray-200" rows="5" placeholder=" "></textarea>
+                    <label for="message">Your Message</label>
+                </div>
                 <button type="submit" class="cta-btn w-full">Send Message</button>
             </form>
         </div>
+        <div class="contact-map mt-12 rounded-lg overflow-hidden">
+            <!-- Embedded Google Map -->
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019490277204!2d-122.41941508468113!3d37.77492977975887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c7f1c0a4d%3A0x8a3b3a3b2c4f4e3d!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus" 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                style="border:0;" 
+                allowfullscreen="" 
+                aria-hidden="false" 
+                tabindex="0">
+            </iframe>
+        </div>
     </section>
-
+    
+    <!-- Footer Section -->
     <footer class="footer">
-        <p>EventMasters © 2023. All rights reserved.</p>
-        <div>
-            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold text-primary">EventMasters</h3>
+                    <p class="mt-2 text-gray-400">Creating Unforgettable Moments Since 2013</p>
+                </div>
+                <div class="social-links mb-6 md:mb-0">
+                    <a href="https://facebook.com/eventmasters" target="_blank" aria-label="Facebook">
+                        <i class="material-icons">facebook</i>
+                    </a>
+                    <a href="https://instagram.com/eventmasters" target="_blank" aria-label="Instagram">
+                        <i class="material-icons">instagram</i>
+                    </a>
+                    <a href="https://linkedin.com/company/eventmasters" target="_blank" aria-label="LinkedIn">
+                        <i class="material-icons">linkedin</i>
+                    </a>
+                </div>
+                <div class="newsletter">
+                    <form class="flex flex-col sm:flex-row items-center">
+                        <input type="email" placeholder="Your Email" class="p-2 rounded-lg border border-gray-400 mb-2 sm:mb-0 sm:mr-2" required>
+                        <button type="submit" class="cta-btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="partner-logos flex justify-center mt-8 gap-6">
+                <img src="https://via.placeholder.com/100x50?text=Partner+1" alt="Partner 1">
+                <img src="https://via.placeholder.com/100x50?text=Partner+2" alt="Partner 2">
+                <img src="https://via.placeholder.com/100x50?text=Partner+3" alt="Partner 3">
+                <img src="https://via.placeholder.com/100x50?text=Partner+4" alt="Partner 4">
+            </div>
+            <div class="mt-8">
+                <a href="#" class="text-gray-400 hover:text-primary mx-2">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-primary mx-2">Terms of Service</a>
+            </div>
+            <div class="created-by mt-4 text-gray-400">
+                Created with ❤️ by Ramiz
+            </div>
         </div>
     </footer>
-
+    
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    
     <script>
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.from(".header-content h1", { opacity: 0, y: -50, duration: 1 });
-        gsap.from(".header-content p", { opacity: 0, y: 50, duration: 1, delay: 0.5 });
-        gsap.utils.toArray(".card").forEach(card => {
-            gsap.from(card, {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Preloader
+            gsap.to("#preloader", { duration: 1, opacity: 0, delay: 2, display: 'none' });
+            
+            // Mobile menu functionality
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            const nav = document.querySelector('.nav');
+        
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+        
+            // GSAP Animations
+            gsap.registerPlugin(ScrollTrigger);
+        
+            // Create floating shapes
+            const floatingShapes = document.querySelector('.floating-shapes');
+            const shapes = ['circle', 'square', 'triangle'];
+            const colors = ['#FF3366', '#FFC107', '#2C3E50'];
+        
+            for (let i = 0; i < 15; i++) {
+                const shape = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                shape.setAttribute('viewBox', '0 0 100 100');
+                shape.style.position = 'absolute';
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.width = (Math.random() * 30 + 20) + 'px';
+                shape.style.fill = colors[Math.floor(Math.random() * colors.length)];
+                shape.style.opacity = 0.3;
+        
+                const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+                let pathD = '';
+        
+                switch(shapeType) {
+                    case 'circle':
+                        pathD = 'M50,50 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0';
+                        break;
+                    case 'square':
+                        pathD = 'M25,25 L75,25 L75,75 L25,75 Z';
+                        break;
+                    case 'triangle':
+                        pathD = 'M50,20 L80,80 L20,80 Z';
+                        break;
+                }
+        
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                shape.appendChild(path);
+                floatingShapes.appendChild(shape);
+        
+                gsap.to(shape, {
+                    y: Math.random() * 100 - 50,
+                    x: Math.random() * 100 - 50,
+                    rotation: Math.random() * 360,
+                    duration: Math.random() * 5 + 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'none'
+                });
+            }
+        
+            // Hero animations
+            gsap.to('.header-content h1', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.5,
+                ease: "power3.out"
+            });
+        
+            gsap.to('.header-content p', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 1,
+                ease: "power3.out"
+            });
+        
+            gsap.to('.cta-btn', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 1.5,
+                ease: "power3.out"
+            });
+        
+            // Service cards animation
+            gsap.utils.toArray('.service-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Portfolio cards animation
+            gsap.utils.toArray('.portfolio-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Timeline items animation
+            gsap.utils.toArray('.timeline-item').forEach((item, i) => {
+                gsap.to(item, {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Team cards animation
+            gsap.utils.toArray('.team-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Pricing cards animation
+            gsap.utils.toArray('.pricing-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Testimonials animation
+            gsap.utils.toArray('.testimonial-item').forEach((item, i) => {
+                gsap.to(item, {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Blog cards animation
+            gsap.utils.toArray('.blog-card').forEach((card, i) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        
+            // Contact Form Animation
+            gsap.to('.contact-map', {
                 scrollTrigger: {
-                    trigger: card,
-                    start: "top 80%"
+                    trigger: '.contact-map',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
                 },
-                opacity: 0,
-                y: 50,
-                duration: 1
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        
+            // Partner Logos Animation
+            gsap.to('.partner-logos', {
+                scrollTrigger: {
+                    trigger: '.footer',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        
+            // Lightbox Initialization
+            lightbox.option({
+                'resizeDuration': 200,
+                'wrapAround': true,
+                'fadeDuration': 500
+            });
+        
+            // Floating Shapes Animations already handled above
+        
+            // Additional Animations
+            // Hover animations for social icons
+            document.querySelectorAll('.footer .social-links a').forEach(icon => {
+                icon.addEventListener('mouseenter', () => {
+                    gsap.to(icon, { scale: 1.2, duration: 0.3 });
+                });
+                icon.addEventListener('mouseleave', () => {
+                    gsap.to(icon, { scale: 1, duration: 0.3 });
+                });
+            });
+        
+            // Scroll to top on logo click
+            document.querySelector('.logo').addEventListener('click', (e) => {
+                e.preventDefault();
+                gsap.to(window, { scrollTo: 0, duration: 1, ease: "power3.out" });
+            });
+        
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector(link.getAttribute('href'));
+                    gsap.to(window, { scrollTo: target.offsetTop - 70, duration: 1, ease: "power3.out" });
+                });
             });
         });
     </script>
+    
 </body>
 </html>
